@@ -9,6 +9,10 @@ import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs"
 import Link from 'next/link'
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import { red, lightBlue, orange, grey } from '@mui/material/colors';
+import ReactMarkdown from 'react-markdown'
 import {Box, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
 
 export default function Generate() {
@@ -162,7 +166,8 @@ export default function Generate() {
                 display: "flex",
                 justifyContent: "center",
                 width: "100vw", 
-            }}>
+            }}
+        >
             <Box 
                 sx={{
                     width: "100%", 
@@ -172,7 +177,7 @@ export default function Generate() {
                     display: "flex", 
                     flexDirection: "column", 
                     alignItems: "center",
-                    justifyContent: "center"
+                    justifyContent: "center",
                 }}
             >
                 {/* app bar */}
@@ -194,7 +199,7 @@ export default function Generate() {
                         </SignedIn>
                     </Toolbar>
                 </AppBar>
-                <Typography variant="h4" align="center" gutterBottom>Generate Flashcard Set</Typography>
+                <Typography variant="h4" align="center" gutterBottom>Generate New Flashcard Set</Typography>
                 <Paper sx={{p: 4, width: '100%'}}>
                     <TextField value = {text} 
                         onChange = {(e) => setText(e.target.value)} 
@@ -227,14 +232,18 @@ export default function Generate() {
             
             {flashcards.length > 0 && (
                 <Box 
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
                     sx={{
                         mt: 4,
                         width: "100%", 
                         maxWidth: "80vw", 
                     }} 
                 >
-                    <Typography variant="h5">Flashcards Preview</Typography>
-                    <Grid container spacing={3}>
+                    <Typography variant="overline" sx={{ fontSize: '1.25rem', mt: 1 }} gutterBottom>Flashcard Set Preview</Typography>
+                    <Grid container spacing={3} sx={{ mt: 0}}>
                         {flashcards.map((flashcard, index) => {
                             return (
                             <Grid item xs={12} sm={6} md={4} key = {index}>
@@ -269,35 +278,38 @@ export default function Generate() {
                                                         transform: 'rotateY(180deg)'
                                                     }
                                             }}>
-                                                <div>
+                                                <div style={{ textAlign: 'center' }}>
                                                     <div>
-                                                        <Typography variant = "h5" component = "div">
-                                                            {flashcard.front}
+                                                        <Typography variant = "h6" component = "div">
+                                                            <ReactMarkdown>{flashcard.front}</ReactMarkdown>
                                                         </Typography>
                                                     </div>
                                                     <div>
-                                                        <Typography variant = "h5" component = "div">
-                                                            {flashcard.back}
+                                                        <Typography variant = "h6" component = "div">
+                                                            <ReactMarkdown>{flashcard.back}</ReactMarkdown>
                                                         </Typography>
                                                     </div>
                                                 </div>
                                             </Box>
                                         </CardContent>
                                     </CardActionArea>
-                                    <Button 
-                                        variant="outlined" 
-                                        color="primary" 
-                                        onClick={() => handleReplaceCard(index)}
-                                    >
-                                        <FindReplaceIcon/>
-                                    </Button>
-                                    <Button 
-                                        variant="outlined" 
-                                        color="secondary" 
-                                        onClick={() => handleDeleteCard(index)}
-                                    >
-                                        <DeleteOutlineIcon/>
-                                    </Button>
+                                    <Box display="flex" justifyContent="flex-end" alignItems="center" sx={{pb:1, pr:1.25}}>
+                                        <IconButton 
+                                            aria-label="replace"
+                                            onClick={() => handleReplaceCard(index)}
+                                            sx={{color: orange[800]}}
+                                        >
+                                            <FindReplaceIcon/>
+                                        </IconButton>
+                                        <IconButton 
+                                            aria-label="delete" 
+                                            onClick={() => handleDeleteCard(index)}
+                                            sx={{color: red[600]}}
+                                        >
+                                            <DeleteOutlineIcon/>
+                                        </IconButton>
+                                    </Box>
+                                    
                                 </Card>
                             </Grid>
                             )
@@ -313,28 +325,36 @@ export default function Generate() {
                     >
                         <Button
                         variant="contained"
-                        color="secondary"
+                        color="primary"
+                        endIcon={<AddIcon/>}
                         onClick={handleOpen}
                         >
-                            Save Set
+                            Create and practice
                         </Button>
                     </Box>
                 </Box>
             )}
             </Box>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Save Flashcard Set</DialogTitle>
+            <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth={true}>
+                <DialogTitle>
+                    <Typography 
+                        variant="h6" 
+                        component="div" 
+                        align="center" 
+                        fontWeight="bold"
+                    >Create a new flashcard set
+                    </Typography>
+                </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        Please enter a name for your flashcard collection.
-                    </DialogContentText>
                     <TextField
                         autoFocus
+                        required
                         margin="dense"
-                        label="Collection Name"
+                        label="Flashcard Set Title"
+                        placeholder='Enter a title, like "Computer Science - Chapter 3: Data Structures"'
                         type="text"
                         fullWidth
-                        variant="outlined"
+                        variant="standard"
                         value = {name}
                         onChange = {(e) => setName(e.target.value)}
                     />
