@@ -8,6 +8,7 @@ import { db } from '@/firebase'
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs"
 import Link from 'next/link'
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {Box, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
 
 export default function Generate() {
@@ -93,6 +94,12 @@ export default function Generate() {
             console.error('Error replacing flashcard:', error.message || error);
             alert('An error occurred while replacing the flashcard. Please try again.');
         }
+    };
+
+    const handleDeleteCard = (index) => {
+        setFlashcards((prevFlashcards) => 
+            prevFlashcards.filter((_, i) => i !== index)
+        );
     };
     
 
@@ -283,6 +290,13 @@ export default function Generate() {
                                         onClick={() => handleReplaceCard(index)}
                                     >
                                         <FindReplaceIcon/>
+                                    </Button>
+                                    <Button 
+                                        variant="outlined" 
+                                        color="secondary" 
+                                        onClick={() => handleDeleteCard(index)}
+                                    >
+                                        <DeleteOutlineIcon/>
                                     </Button>
                                 </Card>
                             </Grid>

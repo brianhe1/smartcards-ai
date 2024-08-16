@@ -22,6 +22,7 @@ Objectives:
 4. Customization: Adapt the difficulty level and depth of content based on the target audience, whether they are beginners, intermediate learners, or advanced students.
 5. Engagement: Incorporate interactive and engaging elements such as hints, mnemonics, or related examples where appropriate to enhance retention and understanding.
 6. Feedback: Provide brief explanations or feedback on incorrect answers to reinforce learning.
+7. Randomness: Introduce variation or randomness when generating flashcards to avoid overly common knowledge. Especially when replacing a flashcard, ensure the new flashcard is unique and covers a different aspect of the topic.
 
 Inputs:
 - Subject/topic to be covered
@@ -37,7 +38,8 @@ Constraints:
 - The flashcards must be concise, with a focus on one key concept per card.
 - Ensure that the language used is appropriate for the specified audience.
 - Avoid overly complex language or unnecessary jargon unless suitable for advanced learners.
-- Please only provide ${quantity} flashcards
+- Please only provide ${quantity} flashcards.  If the quantity is 1, this typically indicates that the user is attempting to replace an existing card. Please generate a flashcard that focuses on more unique or specialized content on the provided topic.
+
 
 Return in the following JSON format:
 {
