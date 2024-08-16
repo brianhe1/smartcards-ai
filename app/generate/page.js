@@ -199,13 +199,12 @@ export default function Generate() {
                         </SignedIn>
                     </Toolbar>
                 </AppBar>
-                <Typography variant="h4" align="center" gutterBottom>Generate New Flashcard Set</Typography>
+                <Typography variant="overline" sx={{ fontSize: '2rem'}} gutterBottom>Generate New Flashcard Set</Typography>
                 <Paper sx={{p: 4, width: '100%'}}>
                     <TextField value = {text} 
                         onChange = {(e) => setText(e.target.value)} 
                         label = "New Set Topic"
                         fullWidth
-                        multiline
                         variant="outlined"
                         sx={{
                             mb: 2,

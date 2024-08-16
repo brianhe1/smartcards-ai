@@ -63,21 +63,29 @@ export default function Flashcards() {
                     </SignedIn>
                 </Toolbar>
             </AppBar>
-            <Grid container spacing={3} sx={{mt: 10}}>
-                {flashcards.map((flashcard, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <Card>
-                            <CardActionArea onClick={()=>(handleCardClick(flashcard.name))}>
-                                <CardContent>
-                                    <Typography variant = 'h6'>
-                                        {flashcard.name}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+            <Box 
+                sx={{
+                    mt: 12,
+                    width: "90vw",
+                }}
+            >
+                <Typography variant="overline" sx={{ fontSize: '2rem'}} gutterBottom>Your Study Library</Typography>
+                <Grid container spacing={3} sx={{mt: 0}} >
+                    {flashcards.map((flashcard, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Card>
+                                <CardActionArea onClick={()=>(handleCardClick(flashcard.name))}>
+                                    <CardContent>
+                                        <Typography variant = 'h6'>
+                                            {flashcard.name}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         </Box>
     )
 }

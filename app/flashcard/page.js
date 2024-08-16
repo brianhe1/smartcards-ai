@@ -9,7 +9,9 @@ import { db } from '@/firebase'
 import Link from 'next/link'
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {AppBar, Toolbar, Box, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid} from '@mui/material'
+import { red, lightBlue, orange, grey } from '@mui/material/colors';
+import ReactMarkdown from 'react-markdown'
+import {AppBar, Toolbar, IconButton, Box, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, Divider, DialogContent, DialogTitle, DialogContentText, Grid} from '@mui/material'
 export default function Flashcard() {
     const { isLoaded, isSignedIn, user } = useUser();  // clerk authentication variables
     const [flashcards, setFlashcards] = useState([])
@@ -113,14 +115,19 @@ export default function Flashcard() {
                     </SignedIn>
                 </Toolbar>
             </AppBar>
-            <Box sx={{mt:8, width: "100%"}}>
-                <Box display="flex" justifyContent="space-between" sx={{width: "100%", p: 3}}>
-                    <Typography variant="h4">{search}</Typography>
-                    <Button onClick={handleOpen}>
-                        <DeleteOutlineIcon />
-                    </Button>
-                </Box>
-                <Grid container spacing={3}>
+            <Box display="flex" justifyContent="space-between" sx={{width: "90vw", pb: 4, pt: 3, mt:10}}>
+                <Typography variant="h4">{search}</Typography>
+                <IconButton 
+                    aria-label="delete" 
+                    onClick={handleOpen}
+                    sx={{color: red[600]}}
+                >
+                    <DeleteOutlineIcon/>
+                </IconButton>
+            </Box>
+            <Divider sx={{ width: "90vw", mx: "auto" }} />
+            <Box sx={{ width: "90vw", mt: 5}}>
+                <Grid container spacing={4}>
                     {flashcards.map((flashcard, index) => {
                         return (
                         <Grid item xs={12} sm={6} md={4} key = {index}>
@@ -157,13 +164,13 @@ export default function Flashcard() {
                                         }}>
                                             <div>
                                                 <div>
-                                                    <Typography variant = "h5" component = "div">
-                                                        {flashcard.front}
+                                                    <Typography variant = "h6" component = "div">
+                                                        <ReactMarkdown>{flashcard.front}</ReactMarkdown>
                                                     </Typography>
                                                 </div>
                                                 <div>
-                                                    <Typography variant = "h5" component = "div">
-                                                        {flashcard.back}
+                                                    <Typography variant = "h6" component = "div">
+                                                        <ReactMarkdown>{flashcard.back}</ReactMarkdown>
                                                     </Typography>
                                                 </div>
                                             </div>
