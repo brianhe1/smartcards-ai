@@ -162,7 +162,7 @@ export default function Flashcard() {
                                                     transform: 'rotateY(180deg)'
                                                 }
                                         }}>
-                                            <div>
+                                            <div style={{ textAlign: 'center'}}>
                                                 <div>
                                                     <Typography variant = "h6" component = "div">
                                                         <ReactMarkdown>{flashcard.front}</ReactMarkdown>

@@ -277,7 +277,7 @@ export default function Generate() {
                                                         transform: 'rotateY(180deg)'
                                                     }
                                             }}>
-                                                <div style={{ textAlign: 'center' }}>
+                                                <div style={{ textAlign: 'center'}}>
                                                     <div>
                                                         <Typography variant = "h6" component = "div">
                                                             <ReactMarkdown>{flashcard.front}</ReactMarkdown>
