@@ -1,11 +1,32 @@
 'use client'
 import getStripe from "@/utils/get-stripe";
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
-import { AppBar, Toolbar, Typography, Button, Box, Grid } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Grid, Stack } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
+import './globals.css';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { grey, teal } from '@mui/material/colors';
+
+
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Poppins", "Lato", "Arial", sans-serif',
+  },
+  palette: {
+    background: {
+      default: grey[100],  // set the default background color for the whole app
+    },
+    primary: {
+      main: teal[500],    // primary color
+    },
+    secondary: {
+      main: "#ffffff",    // secondary color
+    },
+  }
+});
 
 export default function Home() {
 
@@ -48,20 +69,23 @@ export default function Home() {
   
 
   return (
-    <Box maxWidth="100vw">
+    <ThemeProvider theme={theme}>
+    <Box maxWidth="100vw" sx={{ backgroundColor: theme.palette.background.default}}>
       <Head>
         <title>SmartCardsAI</title>
         <meta name = "description" content = 'Create flashcard from your text' />
       </Head>
-      <AppBar position="fixed">
+      <AppBar position="sticky" color="secondary" sx={{ boxShadow: 'none' }}>
         <Toolbar>
           <Typography variant="h6" style={{flexGrow: 1}}>
             SmartCardsAI
           </Typography>
           {/* if signed out, display log in or sign up button */}
           <SignedOut>
-            <Button color = "inherit" href="/sign-in">Log In</Button>
-            <Button color = "inherit" href="sign-up">Sign Up</Button>
+            <Stack direction="row" spacing={2}>
+              <Button color="inherit" href="/sign-in">Log In</Button>
+              <Button variant="contained" color="primary" href="/sign-up">Sign Up</Button>  
+            </Stack>
           </SignedOut>
           {/* if signed in, display user icon */}
           <SignedIn>
@@ -73,13 +97,10 @@ export default function Home() {
       {/* hero/landing page container */}
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}
-        height="85vh">
-        <Typography variant="h2">Welcome to Flashcard SaaS</Typography>
-        <Typography variant="h5">
-          {' '}
-          Easiest way to make flashcards from your text
-        </Typography>
-        <Button variant="contained" color="primary" sx={{mt:2}}>Get Started</Button>
+        height="75vh">
+        <Typography variant="h3" textAlign="center" sx={{maxWidth: "80vw", fontWeight: 'bold'}}gutterBottom>Tired of an endless cycle of creating flashcards?</Typography>
+        <Typography variant="h5" textAlign="center">Let us do the hard part.</Typography>
+        <Button variant="contained" color="primary" sx={{mt:2, pt:1, pb:1}} href="/sign-up">Get Started Today</Button>
       </Box>
 
       {/* features container */}
@@ -113,7 +134,7 @@ export default function Home() {
       </Box>
 
       {/* pricing container */}
-      <Box sx={{my: 6, textAlign: 'center'}}>
+      <Box sx={{ textAlign: 'center'}}>
         <Typography variant="h4" align="center" gutterBottom>
             Pricing
         </Typography>
@@ -143,5 +164,6 @@ export default function Home() {
         </Grid>
       </Box>
     </Box>
+    </ThemeProvider>
   );
 }
