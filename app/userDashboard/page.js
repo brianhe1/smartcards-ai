@@ -1,10 +1,45 @@
 'use client'
 
-import { AppBar, Toolbar, Typography, Button, Box, Grid, CircularProgress} from "@mui/material";
-import Head from "next/head";
+import { AppBar, Toolbar, Typography, Button, Box, Grid, CircularProgress, IconButton} from "@mui/material";
 import { useUser } from '@clerk/nextjs'; 
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
 import { useState, useEffect } from "react";
+
+import * as React from 'react';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import HomeIcon from '@mui/icons-material/Home';
+import StyleIcon from '@mui/icons-material/Style';
+import QueueIcon from '@mui/icons-material/Queue';
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { grey, teal, blue, cyan, green, orange, pink, lightBlue} from '@mui/material/colors';
+
+const drawerWidth = 70;
+
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Poppins", "Lato", "Arial", sans-serif',
+  },
+  palette: {
+    background: {
+      default: grey[100],  // set the default background color for the whole app
+    },
+    primary: {
+      main: teal[500],    // primary color
+    },
+    secondary: {
+      main: "#ffffff",    // secondary color
+    },
+  }
+});
 
 const UserDashboard = () => {
     const { user, isLoaded, isSignedIn } = useUser(); // Get the current user and loading status
@@ -25,9 +60,11 @@ const UserDashboard = () => {
     }
 
     return (
+      <ThemeProvider theme={theme}>
     <Box maxWidth="100vw">
         {/* app bar */}
-        <AppBar position="fixed">
+        <CssBaseline />
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
           <Toolbar>
             <Typography variant="h6" style={{flexGrow: 1}}>
               SmartCardsAI
@@ -44,6 +81,39 @@ const UserDashboard = () => {
           </Toolbar>
         </AppBar>
 
+        {/* menu drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', borderRight: 'none' },
+            backgroundColor: theme.palette.primary.main,
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: 'auto', display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <List>
+              <ListItem disablePadding>
+                <IconButton aria-label="home" size="large" color="primary">
+                  <HomeIcon fontSize="inherit" />
+                </IconButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <IconButton aria-label="library" size="large" color="primary">
+                  <StyleIcon fontSize="inherit" />
+                </IconButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <IconButton aria-label="library" size="large" color="primary">
+                  <QueueIcon fontSize="inherit" />
+                </IconButton>
+              </ListItem>
+            </List>
+            <Divider/>
+          </Box>
+        </Drawer>
+
         {/* user dashboard */}
         <Box
             sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 12}}
@@ -53,6 +123,7 @@ const UserDashboard = () => {
         <Button variant="contained" color="primary" sx={{mt:2}} href="/flashcards">See my Sets</Button>
       </Box>
     </Box>
+    </ThemeProvider>
     )
 }
 
