@@ -1,14 +1,15 @@
 'use client'
 import getStripe from "@/utils/get-stripe";
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
-import { AppBar, Toolbar, Typography, Button, Box, Grid, Stack } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Grid, Stack, Paper} from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import './globals.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { grey, teal } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
+import { grey, teal, blue, cyan, green, orange, pink, lightBlue} from '@mui/material/colors';
 
 
 const theme = createTheme({
@@ -27,6 +28,20 @@ const theme = createTheme({
     },
   }
 });
+
+const FeatureCard = styled(Paper)(({ theme, bgcolor }) => ({
+  width: 310,
+  height: 390,
+  padding: theme.spacing(2),
+  ...theme.typography.body2,  // body text types to match that defined in theme const
+  textAlign: 'center',
+  backgroundColor: bgcolor || '#ffffff',
+  borderRadius: '25px',
+  transition: 'transform 0.3s ease',  // smooth transition for scaling
+  '&:hover': {
+    transform: 'scale(1.05)',  // scale up the card by 5% on hover
+  },
+}));
 
 export default function Home() {
 
@@ -97,40 +112,69 @@ export default function Home() {
       {/* hero/landing page container */}
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}
-        height="75vh">
+        height="70vh">
         <Typography variant="h3" textAlign="center" sx={{maxWidth: "80vw", fontWeight: 'bold'}}gutterBottom>Tired of an endless cycle of creating flashcards?</Typography>
         <Typography variant="h5" textAlign="center">Let us do the hard part.</Typography>
         <Button variant="contained" color="primary" sx={{mt:2, pt:1, pb:1}} href="/sign-up">Get Started Today</Button>
       </Box>
 
       {/* features container */}
-      <Box sx={{my: 6}}> 
-        <Typography variant="h6" align="center" gutterBottom>
-          Features
-        </Typography>
-        <Grid container spacing = {4}>
-          <Grid item xs={12} md={4} >
-            <Typography variant = "h6">Easy Text Input</Typography>
-            <Typography>
-              {'  '}
-              Simply input your text and let our software do the rest. Creating flashcards has never been easier.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={4} >
-            <Typography variant = "h6">Smart Flashcards</Typography>
-            <Typography>
-              {'  '}
-              Our Ai intelligently breaks down your text into concise flashcards, perfect for studying.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={4} >
-            <Typography variant = "h6">Accessible Anywhere</Typography>
-            <Typography>
-              {'  '}
-              Access you flashcards from any device, at any time. Study on the go with ease.
-            </Typography>
-          </Grid>
-        </Grid>
+      <Box display="flex" justifyContent="center" sx={{width: "100%", my: 3, overflowX: "auto", mb: 8}}>
+        <Stack direction="row" spacing={6} sx={{ m: 4, justifyContent: 'center', minWidth: 'max-content'}}>
+            <FeatureCard bgcolor={pink[200]}>
+              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Instant Flashcard Creation</Typography>
+              <Typography>
+                Provide a topic, and our AI instantly generates a set of flashcards, saving you hours of tedious work.
+              </Typography>
+            </FeatureCard>
+         
+            <FeatureCard bgcolor={cyan[400]}>
+              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Smart Learning</Typography>
+              <Typography>
+                Our AI intelligently structures the flashcards to maximize learning efficiency, focusing on key concepts.
+              </Typography>
+            </FeatureCard>
+          
+            <FeatureCard bgcolor={orange[100]}>
+              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Customized Experience</Typography>
+              <Typography>
+                Tailor flashcards to your specific needs with easy-to-use tools, ensuring your study material is exactly how you want it.
+              </Typography>
+            </FeatureCard>
+          
+            <FeatureCard bgcolor={lightBlue[100]}>
+              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Accessible Anywhere</Typography>
+              <Typography>
+                Access you flashcards from any device, at any time. Study on the go with ease.
+              </Typography>
+            </FeatureCard>
+        </Stack>
+      </Box>
+
+      {/* call to action container */}
+      <Box display="flex" justifyContent="center" sx={{width: "100%", backgroundColor: '#ffffff', py: 12}}>
+        <Stack direction="column" spacing={12} sx={{maxWidth: "1100px", width: "70%"}}>
+          <Stack direction="row" spacing={4} sx={{width: "100%", my: 4}} >
+            <Box sx={{flex:1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', py: 4}}>
+              <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}} gutterBottom>Revolutionize Your Study Routine</Typography>
+              <Typography sx={{my: 1}}>Unlock a new way to study with AI-generated flashcards. Simply enter a topic, and let us create personalized flashcards tailored to your learning needs.</Typography>
+              <Button variant="contained" color="primary" sx={{mt:2, p: 2}} href="/sign-up">Get Started</Button>
+            </Box>
+            <Box sx={{ flex: 1, display: 'flex', width: '100%', pl: 6}}>
+                <Box sx={{ width: '410px', height: '290px', backgroundColor: '#8c9eff'}} />
+            </Box>
+          </Stack>
+          <Stack direction="row" display="flex" sx={{width: "100%", my: 3}}>
+            <Box sx={{ flex: 1, display: 'flex', width: '100%', pr: 6}}>
+                <Box sx={{ width: '410px', height: '290px', backgroundColor: '#8c9eff'}} />
+            </Box>
+            <Box sx={{flex:1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', py: 4}}>
+              <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}} gutterBottom>Transform How You Learn</Typography>
+              <Typography sx={{my:1}}>Experience the future of studying with our cutting-edge flashcard generator. Make studying simpler and more efficient today.</Typography>
+              <Button variant="contained" color="primary" sx={{mt:2, p: 2}} href="/sign-up">Try Now</Button>
+            </Box>
+          </Stack>
+        </Stack>
       </Box>
 
       {/* pricing container */}
