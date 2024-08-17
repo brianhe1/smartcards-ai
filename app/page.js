@@ -1,7 +1,7 @@
 'use client'
 import getStripe from "@/utils/get-stripe";
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
-import { AppBar, Toolbar, Typography, Button, Box, Grid, Stack, Paper} from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Grid, Stack, Paper, Card, CardContent, CardActions, List, ListItem, ListItemText} from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -9,6 +9,7 @@ import { useUser } from "@clerk/nextjs";
 import './globals.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import { grey, teal, blue, cyan, green, orange, pink, lightBlue} from '@mui/material/colors';
 
 
@@ -42,6 +43,16 @@ const FeatureCard = styled(Paper)(({ theme, bgcolor }) => ({
     transform: 'scale(1.05)',  // scale up the card by 5% on hover
   },
 }));
+
+const StyledList = styled(List)({
+  padding: 0,
+  margin: 0,
+});
+
+const StyledListItem = styled(ListItem)({
+  padding: 0,
+  margin: 0,
+});
 
 export default function Home() {
 
@@ -158,7 +169,7 @@ export default function Home() {
             <Box sx={{flex:1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', py: 4}}>
               <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}} gutterBottom>Revolutionize Your Study Routine</Typography>
               <Typography sx={{my: 1}}>Unlock a new way to study with AI-generated flashcards. Simply enter a topic, and let us create personalized flashcards tailored to your learning needs.</Typography>
-              <Button variant="contained" color="primary" sx={{mt:2, p: 2}} href="/sign-up">Get Started</Button>
+              <Button variant="contained" color="primary" sx={{mt:2, p: 2, px: 3}} href="/sign-up">Get Started</Button>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', width: '100%', pl: 6}}>
                 <Box sx={{ width: '410px', height: '290px', backgroundColor: '#8c9eff'}} />
@@ -171,43 +182,100 @@ export default function Home() {
             <Box sx={{flex:1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', py: 4}}>
               <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}} gutterBottom>Transform How You Learn</Typography>
               <Typography sx={{my:1}}>Experience the future of studying with our cutting-edge flashcard generator. Make studying simpler and more efficient today.</Typography>
-              <Button variant="contained" color="primary" sx={{mt:2, p: 2}} href="/sign-up">Try Now</Button>
+              <Button variant="contained" color="primary" sx={{mt:2, p: 2, px: 3}} href="/sign-up">Try Now</Button>
             </Box>
           </Stack>
         </Stack>
       </Box>
 
       {/* pricing container */}
-      <Box sx={{ textAlign: 'center'}}>
-        <Typography variant="h4" align="center" gutterBottom>
-            Pricing
-        </Typography>
-        <Grid container spacing = {4} display="flex">
-          <Grid item xs={12} md={6} >
-            <Box sx={{p: 3, border: "1px solid", borderRadius: 2}}>
-              <Typography variant = "h5" gutterBottom>Basic</Typography>
-              <Typography variant="h6" gutterBottom>$5 / month</Typography>
-              <Typography>
-                {'  '}
-                Simply input your text and let our software do the rest. Creating flashcards has never been easier.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{mt: 2}}>Choose Basic</Button>
-            </Box>
+      <Box display="flex" flexDirection="column" alignItems="center" sx={{width: "100%", backgroundColor: teal[50], py: 12}}>
+        <Box display='flex' flexDirection="row" justifyContent="space-between" sx={{width: '70%', maxWidth: "1300px", pb: 8}}>
+          <Stack direction="column" display="flex" justifyContent='flex-start' sx={{width: "50%"}}>
+            <Typography variant="h5" sx={{fontWeight: 'bold'}} gutterBottom>
+              Invest in Your Learning Journey
+            </Typography>
+            <Typography sx={{my:1}}>Each plan offers a range of features to help you maximize your learning efficiency. Find the Perfect Plan for You.</Typography>
+          </Stack>
+          <Box display="flex" alignItems="center" justifyContent='flex-end'>
+            <Button variant="text" endIcon={<ArrowOutwardIcon />}>Learn More</Button>
+          </Box>
+        </Box>
+        <Box display='flex'  sx={{width: '75%', maxWidth: "1300px"}}>
+          {/* basic pricing card */}
+          <Grid container spacing = {4} display="flex">
+            <Grid display="flex" item xs={12} md={6} >
+              <Card sx={{ display: 'flex', flexDirection: 'column', p: 3, borderRadius: 5, flex: 1 }}>
+                <CardContent sx={{ flex: 1 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Basic</Typography>
+                  <Typography gutterBottom>for newcomers</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2 }} gutterBottom>Free</Typography>
+                  <StyledList>
+                    <StyledListItem>
+                      <ListItemText primary="• First item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Second item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Third item" />
+                    </StyledListItem>
+                  </StyledList>
+                </CardContent>
+                <CardActions>
+                  <Button variant="contained" color="primary" sx={{ mt: 2, width: "100%", borderRadius: '25px' }} href="/sign-up">
+                    Get Started
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+            {/* pro pricing card */}
+            <Grid display="flex" item xs={12} md={6} >
+              <Card sx={{ display: 'flex', flexDirection: 'column', p: 3, borderRadius: 5, flex: 1 }}>
+                <CardContent sx={{ flex: 1 }}>
+                  <Typography variant="h5" sx={{fontWeight: 'bold'}}>Pro</Typography>
+                  <Typography gutterBottom>for those who want more</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2}}gutterBottom>$10</Typography>
+                  <StyledList>  
+                    <StyledListItem>
+                      <ListItemText primary="• First item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Second item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Third item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Third item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Third item" />
+                    </StyledListItem>
+                    <StyledListItem>
+                      <ListItemText primary="• Third item" />
+                    </StyledListItem>
+                  </StyledList>
+                </CardContent>
+                <CardActions>
+                  <Button variant="contained" color="primary" sx={{ mt: 2, width: "100%", borderRadius: '25px'}} onClick={handleSubmit}>
+                    subscribe
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6} >
-            <Box sx={{p: 3, border: "1px solid", borderRadius: 2}}>
-                <Typography variant = "h5" gutterBottom>Pro</Typography>
-                <Typography variant="h6" gutterBottom>$10 / month</Typography>
-                <Typography>
-                  {'  '}
-                  Simply input your text and let our software do the rest. Creating flashcards has never been easier.
-                </Typography>
-                <Button variant="contained" color="primary" sx={{mt: 2}} onClick={handleSubmit}>Choose Pro</Button>
-              </Box>
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
+
+      {/* footer container */}
+      <Box>
+
+      </Box>
+
     </Box>
+    
+
     </ThemeProvider>
   );
 }
