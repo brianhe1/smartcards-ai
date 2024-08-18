@@ -1,7 +1,7 @@
 'use client'
 
 import { useUser } from "@clerk/nextjs";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { writeBatch, doc, collection, setDoc, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
@@ -12,7 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import ReactMarkdown from 'react-markdown'
-import {Box, Tooltip, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
+import {Box, Stack, Tooltip, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
 
 // drawer menu imports
 import Drawer from '@mui/material/Drawer';
@@ -64,6 +64,8 @@ const CustomTooltip = styled(({ className, ...props }) => (
 
 export default function Generate() {
     const { isLoaded, isSignedIn, user } = useUser();  // clerk authentication variables
+    const [loading, setLoading] = useState(true);
+    const [loadingCards, setLoadingCards] = useState(false);
     const [flashcards, setFlashcards] = useState([])
     const [flippedCard, setFlippedCard] = useState([])
     const [text, setText] = useState('')
@@ -75,9 +77,30 @@ export default function Generate() {
 
     const [activeButton, setActiveButton] = useState('generate');
 
+    useEffect(() => {
+        if (isLoaded) {
+            setLoading(false); // set loading to false until the user data is loaded
+        }
+    }, [isLoaded]);
+
+    // simulate flashcard generation 
+    useEffect(() => {
+        if (flashcards.length > 0) {
+            setLoadingCards(false);  // stop loading when flashcards are ready
+        }
+    }, [flashcards]);
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     // API call 
     const handleSubmit = async () => {
+        setLoadingCards(true);
         // if input text is empty, show alert
         if (!text.trim()) {
             alert('Please enter some text to generate flashcards.')
@@ -109,7 +132,8 @@ export default function Generate() {
 
             // save the topic for replacing cards
             setSavedText(text);
-
+            // change state, no longer loading cards
+            setLoadingCards(false);
             console.log(data.flashcards)
         } catch (error) {
             console.error('Error fetching flashcards:', error);
@@ -278,9 +302,9 @@ export default function Generate() {
                 </Drawer>
                 
                 <Box
-                sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", pt: 14, pl: 14, pr: 6}}
-                height="100vh"
-                >
+                    sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", pt: 14, pl: 14, pr: 6}}
+                    height="100vh"
+                    >
                     <Typography variant="h4" sx={{ fontWeight: 'bold'}} gutterBottom>Generate New Flashcard Set</Typography>
                     <Paper sx={{p: 4, width: '100%', mt: 2, borderRadius: "10px", mb: 4}}>
                         <TextField value = {text} 
@@ -312,7 +336,18 @@ export default function Generate() {
                         </Button>
                     </Paper>
                 
-                    {flashcards.length > 0 && (
+                    {loadingCards ? (
+                        <Stack 
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ width: "100%", my: 4 }}
+                        >
+                            <CircularProgress />
+                            <Typography variant="body1" sx={{ my: 2 }}>Generating Cards...</Typography>
+                        </Stack>
+                     ) : (
+                    flashcards.length > 0 && (
                         <Box 
                             display="flex"
                             flexDirection="column"
@@ -424,7 +459,7 @@ export default function Generate() {
                                 </Button>
                             </Box>
                         </Box>
-                    )}
+                    ))}
                 </Box>
             </Box>
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth={true}>

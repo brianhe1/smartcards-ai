@@ -9,8 +9,9 @@ import { db } from '@/firebase'
 import Link from 'next/link'
 import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ReactMarkdown from 'react-markdown'
-import {AppBar, Toolbar, IconButton, Box, Tooltip, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid} from '@mui/material'
+import {AppBar, CircularProgress, Toolbar, IconButton, Box, Tooltip, Stack, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid} from '@mui/material'
 
 // drawer menu imports
 import Drawer from '@mui/material/Drawer';
@@ -61,24 +62,24 @@ const CustomTooltip = styled(({ className, ...props }) => (
 
 export default function Flashcard() {
     const { isLoaded, isSignedIn, user } = useUser();  // clerk authentication variables
+    const [loading, setLoading] = useState(true);
     const [flashcards, setFlashcards] = useState([])
     const [flippedCard, setFlippedCard] = useState([])
-    const [open, setOpen] = useState(false)  // modals
+    const [newName, setNewName] = useState('')
+    const [open, setOpen] = useState(false)  // delete modal
+    const [openEdit, setOpenEdit] = useState(false)  // edit modal
+
     const [activeButton, setActiveButton] = useState('library');
 
     const searchParams = useSearchParams()
     const search = searchParams.get('id')
     const router = useRouter()  // initialize useRouter
 
-    // opening and closing the modals (dialog)
-    const handleOpen = () => {
-        setOpen(true)
-    }
-
-    const handleClose = () => {
-        setOpen(false)
-    }
-
+    useEffect(() => {
+        if (isLoaded) {
+            setLoading(false); // set loading to false until the user data is loaded
+        }
+    }, [isLoaded]);
 
     useEffect(() => {
         async function getFlashcard() {
@@ -94,6 +95,32 @@ export default function Flashcard() {
         }
         getFlashcard()
     }, [user, search])
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    // opening and closing the modals (dialog)
+    const handleOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleOpenEdit = () => {
+        setOpenEdit(true)
+    }
+
+    const handleCloseEdit = () => {
+        setOpenEdit(false)
+    }
+
 
     const handleCardClick = (id) => {
         setFlippedCard((prev) => ({
@@ -140,6 +167,61 @@ export default function Flashcard() {
             console.error("Error deleting collection", error)
         }
     }
+
+    // edit collection: create new collection with desired name, copying the documents from the old collection to the new one, and then deleting the old collection
+    const handleCollectionEdit = async (oldName, newName) => {
+        try {
+            // reference to the user's document
+            const userDocRef = doc(collection(db, 'users'), user.id);
+            // fetch the user's document
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const data = userDocSnap.data();
+                const collections = data.flashcards || [];
+                // check if the new name already exists
+                if (collections.some(flashcard => flashcard.name === newName)) {
+                    console.error('A collection with the new name already exists.');
+                    return;
+                }
+                // create a batch to perform multiple operations
+                const batch = writeBatch(db);
+                // reference to old and new collections
+                const oldColRef = collection(userDocRef, oldName);
+                const newColRef = collection(userDocRef, newName);
+                // fetch all documents in the old collection
+                const oldColDocs = await getDocs(oldColRef);
+    
+                // copy each document from the old collection to the new one
+                await Promise.all(
+                    oldColDocs.docs.map(docSnap => {
+                        const docData = docSnap.data();
+                        return setDoc(doc(newColRef, docSnap.id), docData);  // copy the document
+                    })
+                );
+                // delete old documents after they have been copied
+                await Promise.all(
+                    oldColDocs.docs.map(docSnap => deleteDoc(doc(oldColRef, docSnap.id)))
+                );
+                // remove the old collection name and add the new one in the flashcards array
+                const updatedCollections = collections.map(flashcard => 
+                    flashcard.name === oldName ? { ...flashcard, name: newName } : flashcard
+                );
+                // update the flashcards array in the user's document
+                batch.set(userDocRef, { flashcards: updatedCollections }, { merge: true });
+                // commit the batch
+                await batch.commit();
+                // redirect to the newly named collection page after successful renaming
+                router.push(`/flashcard?id=${newName}`);
+                // close edit modal
+                setOpenEdit(false)
+            } else {
+                console.error('User document does not exist.');
+            }
+        } catch (error) {
+            console.error("Error renaming collection", error);
+        }
+    };
+    
 
     if (!isLoaded || !isSignedIn) {
         return <></>
@@ -221,13 +303,23 @@ export default function Flashcard() {
                 >
                     <Box display="flex" justifyContent="space-between" sx={{width: "100%", pb: 4, pr: 1}}>
                         <Typography variant="h4" sx={{fontWeight: 'bold'}}>{search}</Typography>
-                        <IconButton 
-                            aria-label="delete" 
-                            onClick={handleOpen}
-                            sx={{color: red[600]}}
-                        >
-                            <DeleteOutlineIcon/>
-                        </IconButton>
+                        <Stack direction="row" spacing={1}>
+                            <IconButton 
+                                aria-label="edit name" 
+                                onClick={handleOpenEdit}
+                                sx={{color: teal[500]}}
+                            >
+                                <EditOutlinedIcon/>
+                            </IconButton>
+                            <IconButton 
+                                aria-label="delete" 
+                                onClick={handleOpen}
+                                sx={{color: red[600]}}
+                            >
+                                <DeleteOutlineIcon/>
+                            </IconButton>
+                        </Stack>
+                        
                     </Box>
                     <Divider sx={{ width: "100%", mx: "auto", borderColor: teal[500] }} />
                     <Box sx={{ width: "100%", pt: 4, pb: 8}}>
@@ -296,7 +388,7 @@ export default function Flashcard() {
                             </Grid>
                     </Box>
                 </Box>
-                {/* modal */}
+                {/* delete modal */}
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Delete Flashcard Set</DialogTitle>
                     <DialogContent>
@@ -307,6 +399,35 @@ export default function Flashcard() {
                     <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
                         <Button onClick={() => handleCollectionDelete(search)}>Delete</Button>
+                    </DialogActions>
+                </Dialog>
+                 {/* edit modal */}
+                 <Dialog open={openEdit} onClose={handleCloseEdit} maxWidth="sm" fullWidth={true}>
+                    <DialogTitle>
+                        <Typography  
+                            variant="h6" 
+                            component="div" 
+                            fontWeight="bold"
+                        >
+                            Edit Set Name
+                        </Typography>
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            <TextField 
+                                id="outlined-basic" 
+                                label="New Collection Name" 
+                                variant="outlined" 
+                                value = {newName} 
+                                onChange = {(e) => setNewName(e.target.value)}
+                                fullWidth
+                                sx={{mt:1}}
+                            />
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseEdit}>Cancel</Button>
+                        <Button onClick={() => handleCollectionEdit(search, newName)}>Edit</Button>
                     </DialogActions>
                 </Dialog>
             </Box>

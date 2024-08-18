@@ -88,7 +88,7 @@ const UserDashboard = () => {
 
     useEffect(() => {
         if (isLoaded) {
-            setLoading(false); // set loading to false once the user data is loaded
+            setLoading(false); // set loading to false until the user data is loaded
         }
     }, [isLoaded]);
 

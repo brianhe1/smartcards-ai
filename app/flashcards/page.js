@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react'
 import { collection, doc, getDoc, setDoc, onSnapshot} from 'firebase/firestore'
 import { db } from '@/firebase'
 import { useRouter, useSearchParams} from 'next/navigation';
-import {Box, Grid, Card, CardActionArea, CardContent, Typography, AppBar, Toolbar, IconButton, Button, Tooltip} from '@mui/material'
+import {Box, Grid, CircularProgress, Card, CardActionArea, CardContent, Typography, AppBar, Toolbar, IconButton, Button, Tooltip} from '@mui/material'
 import Link from 'next/link'
 
 // drawer menu imports
@@ -58,6 +58,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
 
 export default function Flashcards() {
     const {isLoaded, isSignedIn, user} = useUser()
+    const [loading, setLoading] = useState(true);
     const [flashcards, setFlashcards] = useState([])
     const router = useRouter()
 
@@ -81,9 +82,18 @@ export default function Flashcards() {
         getFlashcards()
     }, [user])
 
+    useEffect(() => {
+        if (isLoaded) {
+            setLoading(false); // set loading to false until the user data is loaded
+        }
+    }, [isLoaded]);
 
-    if (!isLoaded || !isSignedIn) {
-        return <></>
+    if (loading || !isSignedIn) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
     }
 
     const handleCardClick = (id) => {
