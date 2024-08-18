@@ -109,7 +109,7 @@ const UserDashboard = () => {
         <Box maxWidth="100vw">
           {/* app bar */}
           <CssBaseline />
-          <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+          <AppBar position="fixed" sx={{ boxShadow: 'none', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
               <Typography variant="h6" style={{flexGrow: 1}}>
                 SmartCardsAI
@@ -180,7 +180,7 @@ const UserDashboard = () => {
           >
             <Typography variant="h4" sx={{fontWeight: "bold"}}>Welcome Back{(', ' + user?.firstName || ' ')}!</Typography>
             <Box sx={{width: "100%", mb: 4}}>
-              <Typography variant="h6" sx={{mt: 4, fontWeight: "bold"}}>Jump back into studying</Typography>
+              <Typography variant="h5" sx={{mt: 4, fontWeight: "bold"}}>Jump back into studying</Typography>
               <Grid container spacing={3} sx={{ mt: 0 }}>
                 {flashcards.length === 0 ? (
                   <Card sx={{ borderRadius: '10px', width: "100%", m: 2 }}>
@@ -212,10 +212,9 @@ const UserDashboard = () => {
               </Grid>
             </Box>
             <Box sx={{width: "100%"}}>
-              <Typography variant="h6" sx={{mt: 4, fontWeight: "bold"}}>Generate study materials in seconds</Typography>
+              <Typography variant="h5" sx={{mt: 4, fontWeight: "bold"}}>Generate study materials in seconds</Typography>
               <Button variant="contained" color="primary" sx={{mt:2, p:3, borderRadius: "10px"}} href="/generate" fullWidth>Generate Sets</Button>
             </Box>
-           
           </Box>
       </Box>
     </ThemeProvider>

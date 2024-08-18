@@ -156,7 +156,7 @@ export default function Home() {
             <FeatureCard bgcolor={lightBlue[100]}>
               <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Accessible Anywhere</Typography>
               <Typography>
-                Access you flashcards from any device, at any time. Study on the go with ease.
+                Access your flashcards from any device, at any time. Study on the go with ease.
               </Typography>
             </FeatureCard>
         </Stack>
@@ -212,13 +212,13 @@ export default function Home() {
                   <Typography variant="h4" sx={{ fontWeight: "bold", my: 2 }} gutterBottom>Free</Typography>
                   <StyledList>
                     <StyledListItem>
-                      <ListItemText primary="• First item" />
+                      <ListItemText primary="• Limited number of flashcard sets" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Second item" />
+                      <ListItemText primary="• Generate up to 10 flashcards per request" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Third item" />
+                      <ListItemText primary="• Limited flashcard content" />
                     </StyledListItem>
                   </StyledList>
                 </CardContent>
@@ -235,25 +235,25 @@ export default function Home() {
                 <CardContent sx={{ flex: 1 }}>
                   <Typography variant="h5" sx={{fontWeight: 'bold'}}>Pro</Typography>
                   <Typography gutterBottom>for those who want more</Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2}}gutterBottom>$5</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2}}gutterBottom>$10 / year</Typography>
                   <StyledList>  
                     <StyledListItem>
-                      <ListItemText primary="• First item" />
+                      <ListItemText primary="• Unlimited number of flashcard sets" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Second item" />
+                      <ListItemText primary="• Generate up to 50 flashcards per request" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Third item" />
+                      <ListItemText primary="• Detailed analytics on study performance" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Third item" />
+                      <ListItemText primary="• Ability to review flashcards offline" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Third item" />
+                      <ListItemText primary="• Access to priority support with dedicated assistance" />
                     </StyledListItem>
                     <StyledListItem>
-                      <ListItemText primary="• Third item" />
+                      <ListItemText primary="• And many more +" />
                     </StyledListItem>
                   </StyledList>
                 </CardContent>
@@ -270,7 +270,7 @@ export default function Home() {
 
       {/* footer container */}
       <Box sx={{display: "flex", justifyContent: "center", py: 3}}>
-        <Typography>© 2024 SmartcardsAI. All rights reserved.</Typography>
+        <Typography>© 2024 SmartCardsAI. All rights reserved.</Typography>
       </Box>
 
     </Box>
