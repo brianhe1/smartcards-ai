@@ -11,9 +11,56 @@ import FindReplaceIcon from '@mui/icons-material/FindReplace';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { red, lightBlue, orange, grey } from '@mui/material/colors';
 import ReactMarkdown from 'react-markdown'
-import {Box, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
+import {Box, Tooltip, Typography, Paper, TextField, Button, Card, CardActionArea, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText, Grid, AppBar, Toolbar} from '@mui/material'
+
+// drawer menu imports
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import CssBaseline from '@mui/material/CssBaseline';
+import HomeIcon from '@mui/icons-material/Home';
+import StyleIcon from '@mui/icons-material/Style';
+import QueueIcon from '@mui/icons-material/Queue';
+// theme imports
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { grey, teal, blue, cyan, green, orange, pink, lightBlue, red} from '@mui/material/colors';
+
+// site theme
+const theme = createTheme({
+    typography: {
+      fontFamily: '"Poppins", "Lato", "Arial", sans-serif',
+    },
+    palette: {
+      background: {
+        default: grey[100],  // set the default background color for the whole app
+      },
+      primary: {
+        main: teal[500],    // primary color
+      },
+      secondary: {
+        main: "#ffffff",    // secondary color
+      },
+    }
+  });
+// drawer menu width
+const drawerWidth = 70;
+//  custom Tooltip component, for drawer menu
+const CustomTooltip = styled(({ className, ...props }) => (
+<Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+[`& .MuiTooltip-tooltip`]: {
+    backgroundColor: '#ffffff', 
+    color: teal[500], 
+    fontSize: '14px', 
+    borderRadius: '5px',
+    boxShadow: theme.shadows[1], 
+    padding: '6px 12px',
+},
+}));
+
 
 export default function Generate() {
     const { isLoaded, isSignedIn, user } = useUser();  // clerk authentication variables
@@ -25,6 +72,9 @@ export default function Generate() {
     const [name, setName] = useState('')
     const [open, setOpen] = useState(false)  // modals
     const router = useRouter()
+
+    const [activeButton, setActiveButton] = useState('generate');
+
 
     // API call 
     const handleSubmit = async () => {
@@ -161,46 +211,78 @@ export default function Generate() {
     }
 
     return ( 
-        <Box 
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100vw", 
-            }}
-        >
-            <Box 
+        <ThemeProvider theme={theme}>
+        <Box sx={{ width: "100vw"}}>
+            {/* app bar */}
+            <CssBaseline />
+            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                <Toolbar>
+                <Typography variant="h6" style={{flexGrow: 1}}>
+                    SmartCardsAI
+                </Typography>
+                {/* if signed out, display log in or sign up button */}
+                <SignedOut>
+                    <Button color = "inherit" href="/sign-in">Log In</Button>
+                    <Button color = "inherit" href="sign-up">Sign Up</Button>
+                </SignedOut>
+                {/* if signed in, display user icon */}
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
+                </Toolbar>
+            </AppBar>
+
+            {/* menu drawer */}
+            <Drawer
+                variant="permanent"
                 sx={{
-                    width: "100%", 
-                    maxWidth: "80vw", 
-                    mt: 12, 
-                    mb: 6, 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    alignItems: "center",
-                    justifyContent: "center",
+                width: drawerWidth,
+                flexShrink: 0,
+                [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box', borderRight: 'none' },
+                backgroundColor: theme.palette.primary.main,
                 }}
             >
-                {/* app bar */}
-                <AppBar position="fixed">
-                    <Toolbar>
-                        <Typography variant="h6" style={{flexGrow: 1}}>
-                            <Link href="/userDashboard" style={{ textDecoration: 'none', color: 'inherit' }} passHref>
-                                SmartCardsAI
-                            </Link>
-                        </Typography>
-                        {/* if signed out, display log in or sign up button */}
-                        <SignedOut>
-                        <Button color = "inherit" href="/sign-in">Log In</Button>
-                        <Button color = "inherit" href="sign-up">Sign Up</Button>
-                        </SignedOut>
-                        {/* if signed in, display user icon */}
-                        <SignedIn>
-                        <UserButton />
-                        </SignedIn>
-                    </Toolbar>
-                </AppBar>
-                <Typography variant="overline" sx={{ fontSize: '2rem'}} gutterBottom>Generate New Flashcard Set</Typography>
-                <Paper sx={{p: 4, width: '100%'}}>
+                <Toolbar />
+                <Box sx={{ overflow: 'auto', display: "flex", flexDirection: "column", alignItems: "center"}}>
+                <List sx={{py: 4}}>
+                    <ListItem disablePadding>
+                    <CustomTooltip title="Home" placement="right">
+                        <IconButton aria-label="home" size="large" color="primary" href="/userDashboard">
+                        <HomeIcon fontSize="inherit" />
+                        </IconButton>
+                    </CustomTooltip>
+                    </ListItem>
+                    <ListItem disablePadding>
+                    <CustomTooltip title="Your Sets" placement="right">
+                        <IconButton aria-label="library" size="large" color="primary" href="/flashcards">
+                        <StyleIcon fontSize="inherit" />
+                        </IconButton>
+                    </CustomTooltip>
+                    </ListItem>
+                    <ListItem disablePadding>
+                    <CustomTooltip title="Create Sets" placement="right">
+                        <IconButton aria-label="Create Sets" size="large" color="primary" href="/generate" onClick={() => handleButtonClick('generate')}
+                        sx={{
+                            backgroundColor: activeButton === 'generate' ? teal[100] : 'transparent',
+                            '&:hover': {
+                            backgroundColor: activeButton === 'generate' ? teal[100] : theme.palette.action.hover,
+                            },
+                        }}>
+                        <QueueIcon fontSize="inherit" />
+                        </IconButton>
+                    </CustomTooltip>
+                    </ListItem>
+                </List>
+                <Divider/>
+                </Box>
+            </Drawer>
+            
+            <Box
+              sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", pt: 14, pl: 14, pr: 6}}
+              height="100vh"
+            >
+                <Typography variant="h4" sx={{ fontWeight: 'bold'}} gutterBottom>Generate New Flashcard Set</Typography>
+                <Paper sx={{p: 4, width: '100%', mt: 2, borderRadius: "10px", mb: 4}}>
                     <TextField value = {text} 
                         onChange = {(e) => setText(e.target.value)} 
                         label = "New Set Topic"
@@ -212,114 +294,114 @@ export default function Generate() {
                     />
                      <TextField value = {numCards} 
                         onChange = {(e) => setNumCards(e.target.value)} 
-                        label = "New Set Quantity"
+                        label = "Number of Cards"
                         fullWidth
                         variant="outlined"
                         sx={{
                             mb: 2,
                         }}
                     />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    fullWidth
-                >
-                    Submit
-                </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                        sx={{py: 1.75}}
+                        fullWidth
+                    >
+                        Submit
+                    </Button>
                 </Paper>
             
-            {flashcards.length > 0 && (
-                <Box 
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                        mt: 4,
-                        width: "100%", 
-                        maxWidth: "80vw", 
-                    }} 
-                >
-                    <Typography variant="overline" sx={{ fontSize: '1.25rem', mt: 1 }} gutterBottom>Flashcard Set Preview</Typography>
-                    <Grid container spacing={3} sx={{ mt: 0}}>
-                        {flashcards.map((flashcard, index) => {
-                            return (
-                            <Grid item xs={12} sm={6} md={4} key = {index}>
-                                <Card>
-                                    <CardActionArea onClick={() => handleCardClick(index)}>
-                                        <CardContent>
-                                            <Box sx={{
-                                                perspective: "1000px",
-                                                '& > div': {
-                                                        transformStyle: "preserve-3d",
-                                                        transition: "transform 0.6s",
-                                                        position: "relative",
-                                                        width: "100%",
-                                                        height: "200px",
-                                                        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
-                                                        transform: flippedCard[index] 
-                                                            ? 'rotateY(180deg)' 
-                                                            : "rotateY(0deg)"
-                                                    },
-                                                    '& > div > div': {
-                                                        position: "absolute",
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        backfaceVisibility: "hidden",
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        padding: 2,
-                                                        boxSizing: "border-box",
-                                                    }, 
-                                                    '& > div > div:nth-of-type(2)': {
-                                                        transform: 'rotateY(180deg)'
-                                                    }
-                                            }}>
-                                                <div style={{ textAlign: 'center'}}>
-                                                    <div>
-                                                        <Typography variant = "h6" component = "div">
-                                                            <ReactMarkdown>{flashcard.front}</ReactMarkdown>
-                                                        </Typography>
+                {flashcards.length > 0 && (
+                    <Box 
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="flex-start"
+                        justifyContent="center"
+                        sx={{
+                            my: 4,
+                            width: "100%", 
+                        }} 
+                    >
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Flashcard Set Preview</Typography>
+                        <Grid container spacing={3} sx={{ mt: 0}}>
+                            {flashcards.map((flashcard, index) => {
+                                return (
+                                <Grid item xs={12} sm={6} md={4} lg={3} key = {index}>
+                                    <Card sx={{borderRadius: "10px"}}>
+                                        <CardActionArea onClick={() => handleCardClick(index)}>
+                                            <CardContent>
+                                                <Box sx={{
+                                                    perspective: "1000px",
+                                                    '& > div': {
+                                                            transformStyle: "preserve-3d",
+                                                            transition: "transform 0.6s",
+                                                            position: "relative",
+                                                            width: "100%",
+                                                            height: "200px",
+                                                            borderRadius: "10px",
+                                                            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+                                                            transform: flippedCard[index] 
+                                                                ? 'rotateY(180deg)' 
+                                                                : "rotateY(0deg)"
+                                                        },
+                                                        '& > div > div': {
+                                                            position: "absolute",
+                                                            width: "100%",
+                                                            height: "100%",
+                                                            backfaceVisibility: "hidden",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            padding: 2,
+                                                            boxSizing: "border-box",
+                                                        }, 
+                                                        '& > div > div:nth-of-type(2)': {
+                                                            transform: 'rotateY(180deg)'
+                                                        }
+                                                }}>
+                                                    <div style={{ textAlign: 'center'}}>
+                                                        <div>
+                                                            <Typography variant = "h6" component = "div">
+                                                                <ReactMarkdown>{flashcard.front}</ReactMarkdown>
+                                                            </Typography>
+                                                        </div>
+                                                        <div>
+                                                            <Typography variant = "h6" component = "div">
+                                                                <ReactMarkdown>{flashcard.back}</ReactMarkdown>
+                                                            </Typography>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <Typography variant = "h6" component = "div">
-                                                            <ReactMarkdown>{flashcard.back}</ReactMarkdown>
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                            </Box>
-                                        </CardContent>
-                                    </CardActionArea>
-                                    <Box display="flex" justifyContent="flex-end" alignItems="center" sx={{pb:1, pr:1.25}}>
-                                        <IconButton 
-                                            aria-label="replace"
-                                            onClick={() => handleReplaceCard(index)}
-                                            sx={{color: orange[800]}}
-                                        >
-                                            <FindReplaceIcon/>
-                                        </IconButton>
-                                        <IconButton 
-                                            aria-label="delete" 
-                                            onClick={() => handleDeleteCard(index)}
-                                            sx={{color: red[600]}}
-                                        >
-                                            <DeleteOutlineIcon/>
-                                        </IconButton>
-                                    </Box>
-                                    
-                                </Card>
-                            </Grid>
-                            )
-                        })}
-                        
-                    </Grid>
+                                                </Box>
+                                            </CardContent>
+                                        </CardActionArea>
+                                        <Box display="flex" justifyContent="flex-end" alignItems="center" sx={{pb:1, pr:1.25}}>
+                                            <IconButton 
+                                                aria-label="replace"
+                                                onClick={() => handleReplaceCard(index)}
+                                                sx={{color: orange[800]}}
+                                            >
+                                                <FindReplaceIcon/>
+                                            </IconButton>
+                                            <IconButton 
+                                                aria-label="delete" 
+                                                onClick={() => handleDeleteCard(index)}
+                                                sx={{color: red[600]}}
+                                            >
+                                                <DeleteOutlineIcon/>
+                                            </IconButton>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                                )
+                            })}
+                        </Grid>
                     <Box
                         sx={{
                             mt: 4,
                             display: "flex",
                             justifyContent: "center",
+                            width: "100%"
                         }}
                     >
                         <Button
@@ -327,12 +409,15 @@ export default function Generate() {
                         color="primary"
                         endIcon={<AddIcon/>}
                         onClick={handleOpen}
+                        fullWidth
+                        sx={{my:2}}
                         >
                             Create and practice
                         </Button>
                     </Box>
                 </Box>
             )}
+            </Box>
             </Box>
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth={true}>
                 <DialogTitle>
@@ -363,6 +448,6 @@ export default function Generate() {
                     <Button onClick={saveFlashcards}>Save</Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </ThemeProvider>
     )
 }

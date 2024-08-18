@@ -235,7 +235,7 @@ export default function Home() {
                 <CardContent sx={{ flex: 1 }}>
                   <Typography variant="h5" sx={{fontWeight: 'bold'}}>Pro</Typography>
                   <Typography gutterBottom>for those who want more</Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2}}gutterBottom>$10</Typography>
+                  <Typography variant="h4" sx={{ fontWeight: "bold", my: 2}}gutterBottom>$5</Typography>
                   <StyledList>  
                     <StyledListItem>
                       <ListItemText primary="• First item" />
@@ -269,8 +269,8 @@ export default function Home() {
       </Box>
 
       {/* footer container */}
-      <Box>
-
+      <Box sx={{display: "flex", justifyContent: "center", py: 3}}>
+        <Typography>© 2024 SmartcardsAI. All rights reserved.</Typography>
       </Box>
 
     </Box>
