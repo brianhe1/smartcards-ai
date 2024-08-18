@@ -93,12 +93,14 @@ const UserDashboard = () => {
     }, [isLoaded]);
 
     if (loading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
+      return (
+          <ThemeProvider theme={theme}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                  <CircularProgress />
+              </Box>
+          </ThemeProvider>
+      );
+  }
 
     const handleCardClick = (id) => {
       router.push(`/flashcard?id=${id}`)

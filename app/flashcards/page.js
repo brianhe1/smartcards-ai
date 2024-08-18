@@ -88,11 +88,13 @@ export default function Flashcards() {
         }
     }, [isLoaded]);
 
-    if (loading || !isSignedIn) {
+    if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
-            </Box>
+            <ThemeProvider theme={theme}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <CircularProgress />
+                </Box>
+            </ThemeProvider>
         );
     }
 

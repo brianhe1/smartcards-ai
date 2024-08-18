@@ -1,7 +1,9 @@
 'use client'
-import {AppBar, Box, Toolbar, Typography, Button } from '@mui/material'
+import {AppBar, Box, Toolbar, Typography, Button, CircularProgress } from '@mui/material'
 import {SignUp} from "@clerk/nextjs";
+import {useUser} from '@clerk/nextjs'
 import Link from 'next/link'
+import { useState, useEffect } from "react";
 
 // theme imports
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -27,6 +29,25 @@ const theme = createTheme({
   });
 
 export default function SignUpPage() {
+    const {isLoaded} = useUser()
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (isLoaded) {
+            setLoading(false); // set loading to false until the user data is loaded
+        }
+    }, [isLoaded]);
+
+    if (loading) {
+      return (
+          <ThemeProvider theme={theme}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                  <CircularProgress />
+              </Box>
+          </ThemeProvider>
+      );
+    }
+
     return (
     <ThemeProvider theme={theme}>
         <Box>
