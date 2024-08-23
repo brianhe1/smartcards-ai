@@ -25,7 +25,7 @@ export async function POST(req) {
                   },
                   unit_amount: formatAmountForStripe(10), // $10.00 in cents
                   recurring: {
-                    interval: 'month',
+                    interval: 'year',
                     interval_count: 1,
                   },
                 },
