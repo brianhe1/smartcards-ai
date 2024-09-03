@@ -58,6 +58,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
 
 const UserDashboard = () => {
     const { user, isLoaded, isSignedIn } = useUser(); // Get the current user and loading status
+    const displayName = user?.firstName || user?.username || ''; // fallback to username if firstName is null
     const [loading, setLoading] = useState(true);
 
     const [activeButton, setActiveButton] = useState('home');
@@ -180,7 +181,9 @@ const UserDashboard = () => {
               sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", pt: 14, pl: 14, pr: 6}}
               height="100vh"
           >
-            <Typography variant="h4" sx={{fontWeight: "bold"}}>Welcome Back{(', ' + user?.firstName || ' ')}!</Typography>
+            <Typography variant="h4" sx={{fontWeight: "bold"}}>
+              Welcome Back{displayName ? `, ${displayName}` : ''}!
+            </Typography>
             <Box sx={{width: "100%", mb: 4}}>
               <Typography variant="h5" sx={{mt: 4, fontWeight: "bold"}}>Jump back into studying</Typography>
               <Grid container spacing={3} sx={{ mt: 0 }}>

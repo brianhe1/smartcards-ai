@@ -269,7 +269,7 @@ export default function Home() {
       </Box>
 
       {/* footer container */}
-      <Box sx={{display: "flex", justifyContent: "center", py: 3}}>
+      <Box sx={{display: "flex", justifyContent: "center", py: 2}}>
         <Typography>© 2024 SmartCardsAI. All rights reserved.</Typography>
       </Box>
 
