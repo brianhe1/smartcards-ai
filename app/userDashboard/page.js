@@ -101,7 +101,7 @@ const UserDashboard = () => {
               </Box>
           </ThemeProvider>
       );
-  }
+    } 
 
     const handleCardClick = (id) => {
       router.push(`/flashcard?id=${id}`)

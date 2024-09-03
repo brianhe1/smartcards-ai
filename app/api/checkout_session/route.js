@@ -35,10 +35,10 @@ export async function POST(req) {
             // set success and cancel URLs, which the user will be redirected to after payment process
             success_url: `${req.headers.get(
               'Referer',
-            )}result?session_id={CHECKOUT_SESSION_ID}`,
+            )}result?session_id={CHECKOUT_SESSION_ID}`,  // result is the folder that contains frontend
             cancel_url: `${req.headers.get(
               'Referer',
-            )}result?session_id={CHECKOUT_SESSION_ID}`,
+            )}result?session_id={CHECKOUT_SESSION_ID}`,  // result is the folder that contains frontend
         }
           // create the sesssion with given params
           const checkoutSession = await stripe.checkout.sessions.create(params)
