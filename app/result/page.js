@@ -119,7 +119,6 @@ const ResultPage = () => {
                             </Box>
                         </Box>
                     </ThemeProvider>
-                    
                 </>
             )}
         </Box>

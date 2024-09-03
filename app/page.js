@@ -10,7 +10,7 @@ import './globals.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import { grey, teal, blue, cyan, green, orange, pink, lightBlue} from '@mui/material/colors';
+import { grey, teal, blue, cyan, green, orange, pink, indigo, lightBlue} from '@mui/material/colors';
 
 
 const theme = createTheme({
@@ -31,13 +31,14 @@ const theme = createTheme({
 });
 
 const FeatureCard = styled(Paper)(({ theme, bgcolor }) => ({
-  width: 310,
+  width: 320,
   height: 390,
-  padding: theme.spacing(2),
+  margin: theme.spacing(2),
   ...theme.typography.body2,  // body text types to match that defined in theme const
   textAlign: 'center',
   backgroundColor: bgcolor || '#ffffff',
   borderRadius: '25px',
+  overflow: 'hidden',
   transition: 'transform 0.3s ease',  // smooth transition for scaling
   '&:hover': {
     transform: 'scale(1.05)',  // scale up the card by 5% on hover
@@ -123,7 +124,7 @@ export default function Home() {
       {/* hero/landing page container */}
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}
-        height="70vh">
+        height="65vh">
         <Typography variant="h3" textAlign="center" sx={{maxWidth: "80vw", fontWeight: 'bold'}}gutterBottom>Tired of an endless cycle of creating flashcards?</Typography>
         <Typography variant="h5" textAlign="center">Let us do the hard part.</Typography>
         <Button variant="contained" color="primary" sx={{mt:2, pt:1, pb:1}} href="/sign-up">Get Started Today</Button>
@@ -133,32 +134,83 @@ export default function Home() {
       <Box display="flex" justifyContent="center" sx={{width: "100%", my: 3, overflowX: "auto", mb: 8}}>
         <Stack direction="row" spacing={6} sx={{ m: 4, justifyContent: 'center', minWidth: 'max-content'}}>
             <FeatureCard bgcolor={pink[200]}>
-              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Instant Flashcard Creation</Typography>
-              <Typography>
-                Provide a topic, and our AI instantly generates a set of flashcards, saving you hours of tedious work.
-              </Typography>
+              <Stack direction="column">
+                <Box sx={{ pr: 2, pl: 2, pt: 2}}>
+                  <Typography variant = "h6" sx={{ fontWeight: 'bold', mt: 2 }} gutterBottom>Instant Flashcard Creation</Typography>
+                  <Typography>
+                    Provide a topic, and our AI instantly generates a set of flashcards
+                  </Typography>
+                </Box>
+                <Box>
+                  <img
+                    src="/images/card1image.png"
+                    alt="Card 1 Image"
+                    style={{ width: '100%', height: 'auto'}} 
+                  />
+                </Box>
+              </Stack>
             </FeatureCard>
          
             <FeatureCard bgcolor={cyan[400]}>
-              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Smart Learning</Typography>
-              <Typography>
-                Our AI intelligently structures the flashcards to maximize learning efficiency, focusing on key concepts.
-              </Typography>
+              <Stack direction="column">
+                <Box sx={{ pr: 2, pl: 2, pt: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2 }} gutterBottom>
+                    Smart Learning
+                  </Typography>
+                  <Typography>
+                    Our AI structures the flashcards to maximize learning efficiency
+                  </Typography>
+                </Box>
+                <Box>
+                  <img
+                    src="/images/card2image.png" 
+                    alt="Smart Learning"
+                    style={{ width: '100%', height: 'auto' }} 
+                  />
+                </Box>
+              </Stack>
             </FeatureCard>
-          
-            <FeatureCard bgcolor={orange[100]}>
-              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Customized Experience</Typography>
-              <Typography>
-                Tailor flashcards to your specific needs with easy-to-use tools, ensuring your study material is exactly how you want it.
-              </Typography>
-            </FeatureCard>
-          
+
             <FeatureCard bgcolor={lightBlue[100]}>
-              <Typography variant = "h6" sx={{ fontWeight: 'bold', my: 2 }} gutterBottom>Accessible Anywhere</Typography>
-              <Typography>
-                Access your flashcards from any device, at any time. Study on the go with ease.
-              </Typography>
+              <Stack direction="column">
+                <Box sx={{ pr: 2, pl: 2, pt: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2 }} gutterBottom>
+                    Customized Experience
+                  </Typography>
+                  <Typography>
+                    Tailor flashcards to your specific needs with easy-to-use tools
+                  </Typography>
+                </Box>
+                <Box>
+                  <img
+                    src="/images/card3image.png" 
+                    alt="Customized Experience"
+                    style={{ width: '100%', height: 'auto' }} 
+                  />
+                </Box>
+              </Stack>
             </FeatureCard>
+
+            <FeatureCard bgcolor={indigo[300]}>
+              <Stack direction="column">
+                <Box sx={{ pr: 2, pl: 2, pt: 2 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', mt: 2 }} gutterBottom>
+                    Accessible Anywhere
+                  </Typography>
+                  <Typography>
+                    Study on the go with ease
+                  </Typography>
+                </Box>
+                <Box>
+                  <img
+                    src="/images/card4image.png"
+                    alt="Accessible Anywhere"
+                    style={{ width: '100%', height: 'auto' }} // Adjust width and height
+                  />
+                </Box>
+              </Stack>
+            </FeatureCard>
+
         </Stack>
       </Box>
 
