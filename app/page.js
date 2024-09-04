@@ -11,6 +11,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import { grey, teal, blue, cyan, green, orange, pink, indigo, lightBlue} from '@mui/material/colors';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 
 const theme = createTheme({
@@ -217,14 +218,23 @@ export default function Home() {
       {/* call to action container */}
       <Box display="flex" justifyContent="center" sx={{width: "100%", backgroundColor: '#ffffff', py: 12}}>
         <Stack direction="column" spacing={12} sx={{maxWidth: "1100px", width: "70%"}}>
-          <Stack direction="row" spacing={4} sx={{width: "100%", my: 4}} >
+          <Stack direction={{sm: 'column', md: 'row' }} spacing={4} sx={{width: "100%", my: 4}} >
             <Box sx={{flex:1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', py: 4}}>
               <Typography variant="h5" align="center" sx={{fontWeight: 'bold'}} gutterBottom>Revolutionize Your Study Routine</Typography>
               <Typography sx={{my: 1}}>Unlock a new way to study with AI-generated flashcards. Simply enter a topic, and let us create personalized flashcards tailored to your learning needs.</Typography>
               <Button variant="contained" color="primary" sx={{mt:2, p: 2, px: 3}} href="/sign-up">Get Started</Button>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', width: '100%', pl: 6, overflow: 'hidden'}}>
-                <Box sx={{ width: '410px', height: '290px', backgroundColor: '#8c9eff'}}>
+            <Box 
+              sx={{ 
+                flex: 1, 
+                display: 'flex', 
+                width: '100%', 
+                pl: { sm: 0, md: 6 }, 
+                justifyContent: { xs: 'center', md: 'flex-start' }, 
+                alignItems: 'center', 
+                overflow: 'hidden' 
+              }}>
+                <Box sx={{ width: {sm: '100%', md:'410px'}, height: {sm: 'auto', md:'290px'}, backgroundColor: '#8c9eff'}}>
                 <img
                     src="/images/cta1image.png"
                     alt="Accessible Anywhere"
@@ -233,9 +243,18 @@ export default function Home() {
                 </Box>
             </Box>
           </Stack>
-          <Stack direction="row" display="flex" sx={{width: "100%", my: 3}}>
-            <Box sx={{ flex: 1, display: 'flex', width: '100%', pr: 6, overflow: 'hidden'}}>
-                <Box sx={{ width: '410px', height: '290px', backgroundColor: '#81c784'}}>
+          <Stack direction={{sm: 'column', md: 'row' }} spacing={4} sx={{width: "100%", my: 4}} >
+          <Box 
+            sx={{ 
+              flex: 1, 
+              display: 'flex', 
+              width: '100%', 
+              pr: { sm: 0, md: 6 }, 
+              justifyContent: { xs: 'center', md: 'flex-start' }, 
+              alignItems: 'center', 
+              overflow: 'hidden' 
+            }}>
+                <Box sx={{ width: {sm: '100%', md:'410px'}, height: {sm: 'auto', md:'290px'}, backgroundColor: '#81c784'}}>
                   <img
                       src="/images/cta2image.png"
                       alt="Accessible Anywhere"
