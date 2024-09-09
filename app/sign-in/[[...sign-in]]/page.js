@@ -29,7 +29,7 @@ const theme = createTheme({
   });
   
 
-export default function SignUpPage() {
+export default function SignInPage() {
     const {isLoaded} = useUser()
     const [loading, setLoading] = useState(true);
 
